@@ -17,7 +17,6 @@ This white paper surveys ten guardrail systems — open-source and commercial �
 **Key findings:**
 
 - No single system leads across all dimensions. Trade-offs between latency, policy expressiveness, and deployment flexibility are real and consequential even within the self-hosted tier.
-- Mid-pipeline enforcement for agentic workflows remains rare. Only NeMo Guardrails, Meta LlamaFirewall (AlignmentCheck), and OpenGuardrails provide genuine chain-of-thought or tool-call auditing within the self-hosted set.
 - All ten systems surveyed are text-only, with the exception of none — multi-modal self-hosted guardrailing is an open gap in the market.
 - Six of the ten systems are fully open source (Apache 2.0 or MIT). NeMo Guardrails, Guardrails AI, IBM Granite Guardian, LLM Guard, OpenGuardrails, and Arize Phoenix can be deployed with no vendor dependency.
 - Adversarial robustness is a real gap. Published research demonstrates up to 100% evasion of classifiers using character injection and adversarial ML techniques [@guardrail_bypass_arxiv2025].
@@ -59,11 +58,9 @@ The threat categories that guardrails are expected to defend against include the
 
 ### 2.3 Enforcement Architecture Patterns
 
-Three enforcement patterns emerge across the surveyed systems:
+Two enforcement patterns are relevant to the financial sector deployments covered in this paper:
 
 **Pre-input enforcement** screens the user prompt before it reaches the model. This is the earliest point at which prompt injection and jailbreak attempts can be caught, at the cost of false positives that block legitimate requests.
-
-**Mid-pipeline enforcement** audits intermediate reasoning steps within agentic workflows — the chain-of-thought or tool call sequence. This is required to catch goal hijacking that occurs after initial input validation.
 
 **Post-output enforcement** screens the model's response before it is returned to the user. This is the appropriate layer for PII redaction, content moderation, hallucination detection, and insecure code detection.
 
@@ -76,16 +73,12 @@ User Input
     ▼
   LLM / Agent
     │
-    ├── [MID-PIPELINE GUARDRAIL]  ← chain-of-thought audit, tool call inspection
-    │
     ▼
 [POST-OUTPUT GUARDRAIL]  ← content moderation, PII redaction, code safety, grounding
     │
     ▼
 User Response
 ```
-
-Most systems operate at pre-input and post-output. Mid-pipeline enforcement is the least common and most technically demanding capability.
 
 ---
 
@@ -114,7 +107,7 @@ Where vendor documentation did not address a specific dimension (e.g., latency b
 
 Each system was profiled across the following eight dimensions:
 
-1. **Enforcement location** — which of pre-input, mid-pipeline, and post-output are supported.
+1. **Enforcement location** — which of pre-input and post-output are supported.
 2. **Modality** — text, documents, images, audio, video.
 3. **Constraint types** — rule-based, ML classifier, LLM-as-judge, RLHF safety, static analysis.
 4. **Policy language / config format** — how policies are authored (DSL, config file, code, platform UI).
@@ -131,7 +124,7 @@ Each system was profiled across the following eight dimensions:
 
 NeMo Guardrails [@nvidia_nemo_github; @nvidia_nemo_docs] is an open-source (Apache 2.0) toolkit from NVIDIA for adding programmable guardrails to conversational and agentic LLM applications. Its primary distinguishing feature is Colang, a purpose-built dialogue flow DSL (versions 1.0 and 2.0) that defines *rails* — constraints on what topics the model may discuss, what actions it may take, and what outputs it may produce. Colang 2.0 is a complete overhaul introducing parallel flows, async action execution, and Python-like syntax [@nvidia_nemo_colang; @nvidia_nemo_colang_syntax].
 
-NeMo enforces at pre-input, mid-pipeline, and post-output. It integrates natively with LangChain, LangGraph, and LlamaIndex, and supports multi-agent deployments with GPU acceleration. Observability is provided via OpenTelemetry, covering LLM call traces, rail execution times, and token usage. No vendor-published latency benchmarks are available; latency scales with the number of active rails and use of LLM-as-judge rails. **License:** Apache 2.0.
+NeMo enforces at pre-input and post-output. It integrates natively with LangChain, LangGraph, and LlamaIndex, and supports multi-agent deployments with GPU acceleration. Observability is provided via OpenTelemetry, covering LLM call traces, rail execution times, and token usage. No vendor-published latency benchmarks are available; latency scales with the number of active rails and use of LLM-as-judge rails. **License:** Apache 2.0.
 
 ### 4.2 Lakera Guard
 
@@ -185,22 +178,22 @@ CalypsoAI [@calypso_site; @f5_acquires_calypso] was an enterprise AI security pl
 
 ### 5.1 Coverage by Enforcement Location
 
-The following table summarizes which systems enforce at each of the three enforcement points. "Mid-pipeline" denotes genuine agent chain-of-thought or tool call auditing — not simply sequential pre/post calls.
+The following table summarizes which systems enforce at each of the two enforcement points covered in this paper.
 
-| System | Pre-Input | Mid-Pipeline | Post-Output |
-|---|:---:|:---:|:---:|
-| NVIDIA NeMo Guardrails | ✓ | ✓ | ✓ |
-| Lakera Guard | ✓ | | ✓ |
-| Fiddler Guardrails | ✓ | | ✓ |
-| Guardrails AI | ✓ | | ✓ |
-| Meta LlamaFirewall | ✓ | ✓ | ✓ |
-| IBM Granite Guardian | ✓ | | ✓ |
-| Protect AI / LLM Guard | ✓ | | ✓ |
-| OpenGuardrails | ✓ | ✓ | ✓ |
-| Arize AI / Phoenix | ✓ | | ✓ |
-| CalypsoAI / F5 AI Guardrails | ✓ | | ✓ |
+| System | Pre-Input | Post-Output |
+|---|:---:|:---:|
+| NVIDIA NeMo Guardrails | ✓ | ✓ |
+| Lakera Guard | ✓ | ✓ |
+| Fiddler Guardrails | ✓ | ✓ |
+| Guardrails AI | ✓ | ✓ |
+| Meta LlamaFirewall | ✓ | ✓ |
+| IBM Granite Guardian | ✓ | ✓ |
+| Protect AI / LLM Guard | ✓ | ✓ |
+| OpenGuardrails | ✓ | ✓ |
+| Arize AI / Phoenix | ✓ | ✓ |
+| CalypsoAI / F5 AI Guardrails | ✓ | ✓ |
 
-Mid-pipeline enforcement is supported by three systems: NeMo Guardrails, Meta LlamaFirewall (AlignmentCheck), and OpenGuardrails. For financial institutions deploying agentic workflows — where goal hijacking via injected instructions in retrieved content is a material risk — this is a critical differentiator.
+All ten systems cover both enforcement points, giving financial institutions flexibility to apply controls at ingress (blocking adversarial prompts) and egress (preventing sensitive data leakage and policy violations).
 
 ### 5.2 Modality Support Comparison
 
@@ -329,7 +322,7 @@ The following matrix summarizes the ten self-hostable systems across the key eva
 
 **Summary observations:**
 
-*Best-in-class for agents:* Meta LlamaFirewall — the only self-hostable system with open-source chain-of-thought auditing (AlignmentCheck). NeMo Guardrails adds programmable dialogue flow control. OpenGuardrails provides mid-pipeline enforcement as well.
+*Best-in-class for agents:* Meta LlamaFirewall — the only self-hostable system with open-source chain-of-thought auditing (AlignmentCheck) and dedicated agentic attack surface coverage. NeMo Guardrails adds programmable dialogue flow control for conversational and agentic patterns.
 
 *Best-in-class for latency within self-hosted tier:* Lakera Guard Enterprise (sub-50ms on-prem). Fiddler in VPC (sub-100ms, 5M+ req/day).
 
@@ -361,7 +354,7 @@ For teams that require open-source with the same no-egress guarantee, **NeMo Gua
 
 **Meta LlamaFirewall** is the recommended open-source choice. It is the only open-source self-hosted system providing genuine chain-of-thought auditing (AlignmentCheck), and it is production-validated at Meta. Its three-component design (PromptGuard 2 + AlignmentCheck + CodeShield) addresses the full attack surface of agentic systems. Review the Meta Llama community license terms before commercial deployment.
 
-**NeMo Guardrails** with Colang is appropriate for teams that need programmable dialogue flow control across both conversational and agentic patterns, with mid-pipeline rail execution.
+**NeMo Guardrails** with Colang is appropriate for teams that need programmable dialogue flow control across both conversational and agentic patterns.
 
 ### 7.4 For Compliance, Audit, and Regulatory Alignment
 
@@ -397,9 +390,9 @@ This survey has the following limitations that readers should consider when appl
 
 ## 9. Conclusion
 
-The LLM guardrail market has matured rapidly. Production-grade options now exist across the full spectrum of deployment models — cloud-managed, VPC-hosted, and fully self-hosted — and across licensing models from permissive open source to enterprise commercial. The 2025 generation of systems has moved beyond simple keyword filtering toward ML classifiers, LLM-as-judge validation, and in the most advanced cases, real-time chain-of-thought auditing for agentic systems.
+The LLM guardrail market has matured rapidly. Production-grade options now exist across the full spectrum of deployment models — cloud-managed, VPC-hosted, and fully self-hosted — and across licensing models from permissive open source to enterprise commercial. The 2025 generation of systems has moved beyond simple keyword filtering toward ML classifiers, LLM-as-judge validation, and — for agentic deployments — dedicated attack surface coverage for tool-call manipulation.
 
-The most consequential open problem is adversarial robustness. Classifier-based guardrails are susceptible to character-level and adversarial ML perturbations, and no single guardrail mechanism is sufficient. Defense-in-depth — combining classifier, rule-based, and LLM-judge layers — alongside continuous threat intelligence and regular red-teaming are necessary operational practices for financial deployments. A second open problem is the agent mid-pipeline gap: only three of the ten surveyed systems provide genuine mid-pipeline enforcement (NeMo Guardrails, LlamaFirewall, and OpenGuardrails), yet agentic deployments are growing rapidly. Financial institutions planning autonomous agent workflows should treat mid-pipeline guardrailing as a first-class requirement from day one.
+The most consequential open problem is adversarial robustness. Classifier-based guardrails are susceptible to character-level and adversarial ML perturbations, and no single guardrail mechanism is sufficient. Defense-in-depth — combining classifier, rule-based, and LLM-judge layers — alongside continuous threat intelligence and regular red-teaming are necessary operational practices for financial deployments.
 
 ---
 
