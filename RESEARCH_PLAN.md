@@ -43,7 +43,7 @@ Goal: produce a rigorous, reproducible white paper surveying the state of the ar
 Use `research/templates/system_profile.md`. Fields to complete:
 - Short description & vendor link
 - Deployment models (cloud, on-prem, SDK, agent)
-- Enforcement locations (pre-input, mid-pipeline, post-output)
+- Enforcement locations (pre-input, post-output)
 - Constraint types (rule-based, ML-based, RLHF-safety, classifiers)
 - Policy language or config format (examples and schema)
 - Extensibility (custom rules, plugins, third-party model integration)

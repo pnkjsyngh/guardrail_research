@@ -15,7 +15,7 @@ This file defines the canonical outline for `guardrails_whitepaper.md`. Each sec
 <!-- Describe the categories of harm guardrails defend against: prompt injection, jailbreaks, harmful content generation, PII leakage, insecure code output, hallucination, etc. -->
 
 ### 2.3 Enforcement Architecture Patterns
-<!-- Explain the three main enforcement points: pre-input, mid-pipeline, post-output. Include a simple diagram or ASCII figure referencing `figures/enforcement_architecture.png`. -->
+<!-- Explain the two enforcement points covered in this paper: pre-input and post-output. Include a simple diagram or ASCII figure referencing `figures/enforcement_architecture.png`. -->
 
 ## 3. Methods
 ### 3.1 Vendor Selection Criteria
@@ -31,23 +31,19 @@ This file defines the canonical outline for `guardrails_whitepaper.md`. Each sec
 <!-- One subsection per vendor. Each subsection summarizes the filled system profile from `research/notes/<vendor>.md`. Keep each profile to ~1 page in the paper; full details remain in the notes. -->
 
 ### 4.1 NVIDIA NeMo Guardrails
-### 4.2 Amazon Bedrock Guardrails
-### 4.3 Lakera Guard
-### 4.4 Fiddler Guardrails
-### 4.5 Guardrails AI
-### 4.6 Microsoft Azure AI Content Safety + Prompt Shields
-### 4.7 Meta LlamaFirewall / Llama Guard
-### 4.8 IBM Granite Guardian
-### 4.9 Enkrypt AI
-### 4.10 Protect AI / LLM Guard
-### 4.11 OpenGuardrails
-### 4.12 Galileo Guardrails
-### 4.13 Arize AI / Phoenix
-### 4.14 CalypsoAI
+### 4.2 Lakera Guard
+### 4.3 Fiddler Guardrails
+### 4.4 Guardrails AI
+### 4.5 Meta LlamaFirewall / Llama Guard
+### 4.6 IBM Granite Guardian
+### 4.7 Protect AI / LLM Guard
+### 4.8 OpenGuardrails
+### 4.9 Arize AI / Phoenix
+### 4.10 CalypsoAI / F5 AI Guardrails
 
 ## 5. Findings
 ### 5.1 Coverage by Enforcement Location
-<!-- Table: which systems enforce pre-input / mid-pipeline / post-output. -->
+<!-- Table: which systems enforce pre-input / post-output. -->
 <!-- Figure placeholder: `figures/coverage_enforcement.png` -->
 
 ### 5.2 Modality Support Comparison
@@ -77,11 +73,11 @@ This file defines the canonical outline for `guardrails_whitepaper.md`. Each sec
 <!-- Table placeholder: `figures/comparison_matrix.md` -->
 
 ## 7. Recommendations
-### 7.1 For Teams Building on a Single Cloud Provider
-### 7.2 For Teams Requiring On-Premises or Air-Gapped Deployment
-### 7.3 For Agent / Multi-Step Pipeline Use Cases
-### 7.4 For Compliance-Heavy Domains (Finance, Healthcare, Legal)
-### 7.5 For Low-Latency / High-Throughput Applications
+### 7.1 Data Residency and Self-Hosted Deployment
+### 7.2 Vendor-Managed Rules and Compliance
+### 7.3 Agentic and Multi-Step Workflows
+### 7.4 Compliance, Audit, and Regulatory Alignment
+### 7.5 Latency-Sensitive / High-Throughput Applications
 
 ## 8. Limitations
 <!-- Scope limitations: documentation-only assessment, no live benchmarking, vendor list not exhaustive, documentation may be outdated. -->

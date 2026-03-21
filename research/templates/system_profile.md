@@ -22,7 +22,6 @@ Notes:
 ## 3. Enforcement Locations
 <!-- Where in the request/response pipeline does enforcement happen? -->
 - [ ] Pre-input (before prompt reaches the model)
-- [ ] Mid-pipeline (inter-step, agent loop)
 - [ ] Post-output (before response is returned to user)
 
 Notes:
