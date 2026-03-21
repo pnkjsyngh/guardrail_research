@@ -1,7 +1,9 @@
 {
   "permissions": {
     "allow": [
-      "WebSearch"
+      "WebSearch",
+      "WebFetch(domain:guardrailsai.com)",
+      "WebFetch(domain:hub.guardrailsai.com)"
     ]
   }
 }

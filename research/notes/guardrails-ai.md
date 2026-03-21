@@ -2,7 +2,7 @@
 
 > **Assessment type:** documentation-only
 > **Profile status:** complete
-> **Last updated:** 2026-03-18
+> **Last updated:** 2026-03-20
 
 ## 1. Overview
 
@@ -63,6 +63,71 @@ validated = guard(llm_output)
 - Streaming validation for incremental output checking.
 - Pydantic v2 full compatibility (type system, decorators, field definitions).
 - OpenTelemetry integration via `pydantic-ai-guardrails` for tracing.
+
+## 7a. Hub Validator Taxonomy (68 validators total)
+
+Validators fall into four tiers based on their runtime dependencies. This is critical for local/offline deployments.
+
+### Tier 1 — Fully offline (pure logic, no model)
+Run as pure Python immediately after `pip install`. No network required post-installation.
+
+| Validator | What it does |
+|---|---|
+| `ban_list` | Fuzzy-matches against a user-defined word/phrase blocklist |
+| `regex_match` | Validates against a regex pattern |
+| `secrets_present` | Detects API keys, tokens, credentials via pattern matching |
+| `valid_json` | Checks output is valid JSON |
+| `valid_sql` | Checks output is valid SQL |
+| `valid_python` | Checks output is valid Python |
+| `competitor_check` | Flags competitor names from a rule-based list |
+| `valid_url` | Validates URLs in output |
+| `reading_time` | Enforces output length / reading time limits |
+
+### Tier 2 — Offline after first download (specialized fine-tuned models)
+Use purpose-built, task-specific models (not general LLMs). Models are downloaded from Hugging Face on first use and cached locally. After caching, set `use_local=True` and they run fully offline. For air-gapped environments: pre-cache models, then set `HF_HUB_OFFLINE=1`.
+
+| Validator | Model powering it | What it does |
+|---|---|---|
+| `toxic_language` | Detoxify `toxic-bert` (HF) | Detects toxicity, threats, insults, hate across 7 categories |
+| `detect_pii` | Microsoft Presidio (local NER) | Detects and anonymizes PII — runs entirely locally via `presidio-analyzer` + `presidio-anonymizer` |
+| `bias_check` | HF classifier | Detects bias by age, gender, ethnicity, religion |
+| `sensitive_topics` | HF classifier | Detects sensitive topic categories |
+| `arize_dataset_embeddings` | Embedding model (HF) | Compares prompt against known jailbreak embedding dataset |
+
+Key point: these validators use **specialized fine-tuned models**, not general-purpose LLMs. No OpenAI key or similar required.
+
+### Tier 3 — Self-hosted endpoint (your infrastructure, your GPU)
+Any Tier 2 validator can be pointed at a self-hosted FastAPI/Flask server running the model. This moves inference off-CPU onto your own GPU hardware without any external calls.
+
+```python
+from guardrails.hub import ToxicLanguage
+
+guard = Guard().use(
+    ToxicLanguage(validation_endpoint="http://localhost:8000/validate")
+)
+```
+
+Your endpoint must implement the `_inference_remote` interface documented by Guardrails AI.
+
+### Tier 4 — Requires external LLM API (not suitable for local-only)
+These validators delegate judgment to whichever LLM you configure via LiteLLM. They default to `gpt-3.5-turbo` but accept any LiteLLM-compatible model string — including a locally hosted Ollama model.
+
+| Validator | Default model | Notes |
+|---|---|---|
+| `unusual_prompt` | `gpt-3.5-turbo` (configurable) | Jailbreak / psychological prompt detection via LLM judgment |
+| `provenance_llm` | Configurable | Factuality checking via LLM judge |
+| `llm_critic` | Configurable | Grade response against criteria via LLM |
+| `grounded_ai_hallucination` | Grounded AI API | Hallucination detection — external service, not configurable locally |
+| `llm_rag_evaluator` | Arize + LLM API | RAG relevance — external service |
+
+**Important:** For Tier 4 validators that use LiteLLM (`unusual_prompt`, `provenance_llm`, `llm_critic`), you can point them at a local Ollama model and they become fully local:
+```python
+UnusualPrompt(llm_callable="ollama/llama3")
+```
+Validators using proprietary external APIs (`grounded_ai_hallucination`, `llm_rag_evaluator`) cannot be made local.
+
+### Hub installation requires internet (setup-time only)
+`guardrails hub install hub://guardrails/<validator>` requires a Guardrails Hub API key at install time. Once installed and models cached, all Tier 1–3 validators run fully offline. Recommended workflow for air-gapped deployments: install and cache on a connected machine, transfer the environment.
 
 ## 8. Observability & Auditability
 

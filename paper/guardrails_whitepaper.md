@@ -140,7 +140,17 @@ Fiddler [@fiddler_site; @fiddler_trust_service] is an enterprise AI observabilit
 
 ### 4.5 Guardrails AI
 
-Guardrails AI [@guardrailsai_site; @guardrailsai_github] is an open-source Python framework (Apache 2.0) for validating and structuring LLM outputs through modular *validators*. Validators are composed into `Guard` objects applied to inputs and outputs. Policy schemas are defined as RAIL (Reliable AI Markup Language, an XML-like spec) or Pydantic v2 BaseModel classes. The Guardrails Hub provides a marketplace of pre-built validators covering PII detection, toxic language, hallucination, and more. Re-asking — automatically prompting the model to correct a failed output — is a native capability, though it adds significant latency when triggered. The Guardrails Index (launched February 2025) benchmarks 24 validators across 6 categories including latency [@guardrailsai_docs]. OpenTelemetry tracing is available via `pydantic-ai-guardrails`. **License:** Apache 2.0 (core); commercial hub tier pricing on request.
+Guardrails AI [@guardrailsai_site; @guardrailsai_github] is an open-source Python framework (Apache 2.0) for validating and structuring LLM outputs through modular *validators*. Validators are composed into `Guard` objects applied to inputs and outputs. Policy schemas are defined as RAIL (Reliable AI Markup Language, an XML-like spec) or Pydantic v2 BaseModel classes. The Guardrails Hub provides 68 pre-built validators covering PII detection, toxic language, jailbreak detection, hallucination, bias, and more. Re-asking — automatically prompting the model to correct a failed output — is a native capability, though it adds significant latency when triggered. The Guardrails Index (launched February 2025) benchmarks 24 validators across 6 categories including latency [@guardrailsai_docs]. OpenTelemetry tracing is available via `pydantic-ai-guardrails`.
+
+**Model architecture — no proprietary LLM.** Guardrails AI owns no underlying model. Validators fall into three implementation types:
+
+- *Specialized fine-tuned models.* `toxic_language` uses Detoxify's `toxic-bert` (a BERT model trained specifically on toxicity classification); `detect_pii` uses Microsoft Presidio's local NER stack. Both run fully offline after the initial model download — no API key required.
+- *Pure logic / rules.* `ban_list`, `regex_match`, `secrets_present`, `valid_json`, `valid_sql`, `valid_python`, and several others are pure Python with no model dependency whatsoever. These are safe for air-gapped environments with zero caveats.
+- *LLM-as-judge (configurable).* `unusual_prompt`, `provenance_llm`, and `llm_critic` delegate judgment to an LLM via LiteLLM. The default is `gpt-3.5-turbo`, but any LiteLLM-compatible model string is accepted — including a locally hosted Ollama instance (`llm_callable="ollama/llama3"`), making these validators fully local when paired with a local LLM.
+
+**Local deployment posture.** Tier 1 (logic) and Tier 2 (fine-tuned model) validators run offline after installation and model caching. Tier 3 (LLM-judge) validators run offline when pointed at a local LLM. The one setup-time constraint: installing validators from the Hub requires a Guardrails Hub API key and internet access. The recommended workflow for air-gapped production environments is to install and cache all validators on a connected machine, then transfer the environment. Alternatively, validators can be self-hosted behind an internal FastAPI endpoint using the `validation_endpoint` constructor argument, moving inference onto internal GPU hardware entirely.
+
+**License:** Apache 2.0 (core); commercial hub tier pricing on request.
 
 ### 4.6 Microsoft Azure AI Content Safety + Prompt Shields
 
@@ -234,7 +244,7 @@ Four distinct approaches to policy authoring emerged from the survey.
 
 **Configuration files and platform UIs.** Amazon Bedrock, Azure AI Content Safety, Lakera Guard, Fiddler, CalypsoAI, and Galileo configure policies through console UIs, API parameters, or YAML/JSON configuration. This approach is accessible to non-developers and security teams but is less expressive for complex conditional logic.
 
-**Code-first (Python).** Guardrails AI and LLM Guard define policies as Python objects (validators or scanner instances). This approach integrates naturally into software development workflows and benefits from version control, testing, and IDE tooling, but requires developer involvement for any policy change.
+**Code-first (Python) with vendor-managed rule logic.** Guardrails AI and LLM Guard define policies as Python objects (validators or scanner instances). This approach integrates naturally into software development workflows and benefits from version control, testing, and IDE tooling. Crucially, in Guardrails AI's case the *rule logic itself* is vendor-maintained via the Hub — teams install a validator and consume its policy definition without writing the underlying detection logic. Developer involvement is still required to compose validators into guards and configure thresholds, but the core policy authoring burden is on the Hub maintainers.
 
 **Natural language.** IBM Granite Guardian's BYOC (Bring Your Own Criteria) allows risk definitions expressed as natural language prompts. This is the most accessible authoring experience but is less predictable and harder to audit than structured specifications.
 
