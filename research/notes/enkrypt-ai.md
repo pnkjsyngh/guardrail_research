@@ -17,10 +17,10 @@ Enkrypt AI Guardrails is a commercial enterprise platform notable for multi-moda
 - [ ] SDK / library
 - [ ] Agent / sidecar
 
-## 3. Enforcement Locations
+## 3. Guardrail Locations
 - [x] Pre-input
 - [ ] Mid-pipeline
-- [x] Post-output
+- [x] Post-input
 
 ## 4. Modality Support
 - [x] Text

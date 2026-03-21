@@ -24,7 +24,7 @@ This white paper surveys ten guardrail systems — open-source and commercial �
 **Top recommendations:**
 
 - *Primary self-hosted commercial choice*: Fiddler — purpose-built VPC deployment, no data egress, 50+ metrics, sub-100ms at 5M+ req/day.
-- *Primary open-source choice*: Guardrails AI — vendor-managed Hub rules, self-hosted enforcement runtime, Apache 2.0.
+- *Primary open-source choice*: Guardrails AI — vendor-managed Hub rules, self-hosted guardrail runtime, Apache 2.0.
 - *Agentic pipelines*: Meta LlamaFirewall — only open-source system with chain-of-thought auditing (AlignmentCheck).
 - *Compliance and audit*: CalypsoAI/F5 — GDPR/EU AI Act audit trails, continuous red-teaming, on-prem/hybrid deployment.
 - *Latency-sensitive / high-throughput*: Lakera Guard Enterprise (sub-50ms, on-prem tier) or Fiddler (sub-100ms, VPC-native).
@@ -36,7 +36,7 @@ This white paper surveys ten guardrail systems — open-source and commercial �
 
 ### 2.1 What Are Guardrails?
 
-A guardrail is a runtime enforcement mechanism that intercepts and evaluates the inputs sent to, or outputs received from, a large language model, and takes an action — blocking, redacting, transforming, or alerting — when a policy is violated. Guardrails are distinct from alignment training and Reinforcement Learning from Human Feedback (RLHF). Guardrails operate at inference time and can be updated, versioned, and audited independently of the model.
+A guardrail is a runtime guardrail mechanism that intercepts and evaluates the inputs sent to, or outputs received from, a large language model, and takes an action — blocking, redacting, transforming, or alerting — when a policy is violated. Guardrails are distinct from alignment training and Reinforcement Learning from Human Feedback (RLHF). Guardrails operate at inference time and can be updated, versioned, and audited independently of the model.
 
 The need for inference-time guardrails arises from several practical realities. First, models can be fine-tuned or prompted in ways that bypass alignment. Second, organizational policies — data residency, topic restrictions, PII redaction requirements — vary by deployment context and cannot be encoded once into a model. Third, agentic systems, where models take actions on behalf of users, introduce new attack surfaces (prompt injection by external content, goal misalignment in multi-step reasoning) that training-time alignment does not address.
 
@@ -56,13 +56,13 @@ The threat categories that guardrails are expected to defend against include the
 
 **Goal misalignment in agentic systems.** In multi-step agent pipelines, the model may be manipulated mid-execution — through injected instructions in tool outputs — to pursue goals inconsistent with the original task.
 
-### 2.3 Enforcement Architecture Patterns
+### 2.3 Guardrail Architecture Patterns
 
-Two enforcement patterns are relevant to the financial sector deployments covered in this paper:
+Two guardrail patterns are relevant to the financial sector deployments covered in this paper:
 
-**Pre-input enforcement** screens the user prompt before it reaches the model. This is the earliest point at which prompt injection and jailbreak attempts can be caught, at the cost of false positives that block legitimate requests.
+**Pre-input guardrail** screens the user prompt before it reaches the model. This is the earliest point at which prompt injection and jailbreak attempts can be caught, at the cost of false positives that block legitimate requests.
 
-**Post-output enforcement** screens the model's response before it is returned to the user. This is the appropriate layer for PII redaction, content moderation, hallucination detection, and insecure code detection.
+**Post-input guardrail** screens the model's response before it is returned to the user. This is the appropriate layer for PII redaction, content moderation, hallucination detection, and insecure code detection.
 
 ```
 User Input
@@ -74,7 +74,7 @@ User Input
   LLM / Agent
     │
     ▼
-[POST-OUTPUT GUARDRAIL]  ← content moderation, PII redaction, code safety, grounding
+[POST-INPUT GUARDRAIL]  ← content moderation, PII redaction, code safety, grounding
     │
     ▼
 User Response
@@ -86,28 +86,24 @@ User Response
 
 ### 3.1 Vendor Selection Criteria
 
-Five systems were specified in the original project brief: NVIDIA NeMo Guardrails, Amazon Bedrock Guardrails, Lakera Guard, Fiddler Guardrails, and Guardrails AI. An additional nine systems were identified through a structured internet inventory conducted on 2026-03-18, producing a candidate list of fourteen systems spanning cloud-managed, self-hosted, and open-source options. After applying the financial sector deployment filter described below, ten systems are included in the analysis.
-
-This paper applies a **financial sector deployment filter**: only systems that support self-hosted or VPC deployment — where all inference occurs within the institution's own cloud environment and no data is transmitted to vendor-managed external infrastructure — are included in the analysis. Four systems were excluded on this basis:
+This paper analyzes systems that support self-hosted or VPC deployment — where all inference occurs within the institution's own cloud environment and no data is transmitted to vendor-managed external infrastructure. Four systems were excluded on this basis:
 
 - **Amazon Bedrock Guardrails** — AWS-managed service only; no self-hosted option.
 - **Microsoft Azure AI Content Safety + Prompt Shields** — Azure-managed service only; no self-hosted option.
 - **Enkrypt AI** — cloud SaaS only; no on-premises or VPC deployment documented.
 - **Galileo Guardrails** — cloud SaaS only; no on-premises or VPC deployment documented.
 
-The remaining ten systems are profiled in Section 4.
+The remaining systems are profiled in Section 4.
 
 ### 3.2 Data Collection Process
 
-All analysis is documentation-only. For each system, the following artifacts were collected where publicly available: official documentation, API reference, GitHub repositories, vendor blog posts, and third-party comparison analyses. Artifacts are stored under `research/sources/<vendor>/` with citation logs in `research/sources/<vendor>/README.md`. Full system profiles are in `research/notes/<vendor>.md`.
-
-Where vendor documentation did not address a specific dimension (e.g., latency benchmarks, pricing), this is noted explicitly in the profile as "not published." Assessments based on third-party analyses (e.g., Enkrypt AI comparative study) are cited with the source.
+For each system, the following artifacts were collected where publicly available: official documentation, API reference, GitHub repositories, vendor blog posts, and third-party comparison analyses. Artifacts are stored under `research/sources/<vendor>/` with citation logs in `research/sources/<vendor>/README.md`. Full system profiles are in `research/notes/<vendor>.md`. Where vendor documentation did not address a specific dimension (e.g., latency benchmarks, pricing), this is noted explicitly in the profile as "not published." Assessments based on third-party analyses (e.g., Enkrypt AI comparative study) are cited with the source.
 
 ### 3.3 Evaluation Dimensions
 
 Each system was profiled across the following eight dimensions:
 
-1. **Enforcement location** — which of pre-input and post-output are supported.
+1. **Guardrail location** — which of pre-input and post-input are supported.
 2. **Modality** — text, documents, images, audio, video.
 3. **Constraint types** — rule-based, ML classifier, LLM-as-judge, RLHF safety, static analysis.
 4. **Policy language / config format** — how policies are authored (DSL, config file, code, platform UI).
@@ -124,7 +120,7 @@ Each system was profiled across the following eight dimensions:
 
 NeMo Guardrails [@nvidia_nemo_github; @nvidia_nemo_docs] is an open-source (Apache 2.0) toolkit from NVIDIA for adding programmable guardrails to conversational and agentic LLM applications. Its primary distinguishing feature is Colang, a purpose-built dialogue flow DSL (versions 1.0 and 2.0) that defines *rails* — constraints on what topics the model may discuss, what actions it may take, and what outputs it may produce. Colang 2.0 is a complete overhaul introducing parallel flows, async action execution, and Python-like syntax [@nvidia_nemo_colang; @nvidia_nemo_colang_syntax].
 
-NeMo enforces at pre-input and post-output. It integrates natively with LangChain, LangGraph, and LlamaIndex, and supports multi-agent deployments with GPU acceleration. Observability is provided via OpenTelemetry, covering LLM call traces, rail execution times, and token usage. No vendor-published latency benchmarks are available; latency scales with the number of active rails and use of LLM-as-judge rails. **License:** Apache 2.0.
+NeMo enforces at pre-input and post-input. It integrates natively with LangChain, LangGraph, and LlamaIndex, and supports multi-agent deployments with GPU acceleration. Observability is provided via OpenTelemetry, covering LLM call traces, rail execution times, and token usage. No vendor-published latency benchmarks are available; latency scales with the number of active rails and use of LLM-as-judge rails. **License:** Apache 2.0.
 
 ### 4.2 Lakera Guard
 

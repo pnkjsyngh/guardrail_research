@@ -17,10 +17,10 @@ Guardrails AI is an open-source Python framework for validating and structuring 
 - [x] SDK / library (Python)
 - [ ] Agent / sidecar
 
-## 3. Enforcement Locations
+## 3. Guardrail Locations
 - [x] Pre-input (input guards)
 - [ ] Mid-pipeline
-- [x] Post-output (output guards, re-asking loop)
+- [x] Post-input (output guards, re-asking loop)
 
 ## 4. Modality Support
 - [x] Text

@@ -19,10 +19,10 @@ Fiddler AI is an enterprise AI observability and control platform. Its guardrail
 
 Notes: Fiddler runs entirely within the customer's cloud environment. No data is sent to Fiddler's infrastructure.
 
-## 3. Enforcement Locations
+## 3. Guardrail Locations
 - [x] Pre-input (prompt inspection)
 - [ ] Mid-pipeline
-- [x] Post-output (response scoring)
+- [x] Post-input (response scoring)
 
 ## 4. Modality Support
 - [x] Text

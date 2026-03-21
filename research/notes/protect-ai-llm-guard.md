@@ -19,10 +19,10 @@ LLM Guard is an open-source (MIT) security toolkit by Protect AI providing modul
 
 Notes: Can also be deployed as a standalone REST API server.
 
-## 3. Enforcement Locations
+## 3. Guardrail Locations
 - [x] Pre-input (input scanners)
 - [ ] Mid-pipeline
-- [x] Post-output (output scanners)
+- [x] Post-input (output scanners)
 
 ## 4. Modality Support
 - [x] Text

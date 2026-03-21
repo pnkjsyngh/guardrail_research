@@ -17,10 +17,10 @@ Lakera Guard is a developer-first AI security REST API focused on prompt injecti
 - [ ] SDK / library
 - [ ] Agent / sidecar
 
-## 3. Enforcement Locations
+## 3. Guardrail Locations
 - [x] Pre-input (prompt injection, jailbreak)
 - [ ] Mid-pipeline
-- [x] Post-output (data leakage, insecure output)
+- [x] Post-input (data leakage, insecure output)
 
 ## 4. Modality Support
 - [x] Text

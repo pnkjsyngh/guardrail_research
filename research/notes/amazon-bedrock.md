@@ -19,10 +19,10 @@ Amazon Bedrock Guardrails is a managed guardrail service built into AWS Bedrock 
 
 Notes: `ApplyGuardrail` API allows use with models outside Bedrock (self-hosted, OpenAI, Gemini).
 
-## 3. Enforcement Locations
+## 3. Guardrail Locations
 - [x] Pre-input (prompt attack detection)
 - [ ] Mid-pipeline
-- [x] Post-output (content filters, PII redaction)
+- [x] Post-input (content filters, PII redaction)
 
 ## 4. Modality Support
 - [x] Text
@@ -82,7 +82,7 @@ bedrock.create_guardrail(
 | Content filter cost | $0.15 / 1,000 text units | AWS pricing page (as of Apr 2025) |
 | Sensitive info filter | Free for some types | AWS pricing page |
 
-Known limitations: Cloud-only; no on-premises option. No mid-pipeline enforcement.
+Known limitations: Cloud-only; no on-premises option. No mid-pipeline guardrail.
 
 ## 10. Pricing / Licensing
 

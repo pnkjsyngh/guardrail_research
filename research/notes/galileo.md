@@ -17,10 +17,10 @@ Galileo is an AI reliability platform for multi-agent systems combining observab
 - [x] SDK / library (Python + TypeScript)
 - [ ] Agent / sidecar
 
-## 3. Enforcement Locations
+## 3. Guardrail Locations
 - [x] Pre-input
 - [x] Mid-pipeline (agentic observability — multi-step flow adherence)
-- [x] Post-output
+- [x] Post-input
 
 ## 4. Modality Support
 - [x] Text

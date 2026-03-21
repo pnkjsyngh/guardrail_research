@@ -17,10 +17,10 @@ Arize Phoenix is an open-source (Apache 2.0) AI observability and evaluation fra
 - [x] SDK / library (Python, Java)
 - [ ] Agent / sidecar
 
-## 3. Enforcement Locations
+## 3. Guardrail Locations
 - [x] Pre-input (jailbreak detection via embedding comparison)
 - [ ] Mid-pipeline
-- [x] Post-output (evaluation metrics as guardrails)
+- [x] Post-input (evaluation metrics as guardrails)
 
 Notes: Arize AX docs describe guardrails attachable to spans/traces. Phoenix alone has no native production guardrail enforcement — primarily an evaluation/observability tool.
 

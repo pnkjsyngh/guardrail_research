@@ -19,10 +19,10 @@ CalypsoAI was an enterprise AI security platform providing runtime protection, a
 
 Notes: Hybrid deployment supported. Self-hosted version uses Prefect for orchestration (required for custom dataset features as of Dec 2025).
 
-## 3. Enforcement Locations
+## 3. Guardrail Locations
 - [x] Pre-input (prompt injection, jailbreak)
 - [ ] Mid-pipeline
-- [x] Post-output (data leakage, policy violations)
+- [x] Post-input (data leakage, policy violations)
 
 ## 4. Modality Support
 - [x] Text

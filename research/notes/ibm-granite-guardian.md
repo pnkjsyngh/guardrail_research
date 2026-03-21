@@ -17,12 +17,12 @@ IBM Granite Guardian is a collection of open models (Apache 2.0) from IBM Resear
 - [x] SDK / library (Hugging Face transformers)
 - [ ] Agent / sidecar
 
-## 3. Enforcement Locations
+## 3. Guardrail Locations
 - [x] Pre-input
 - [ ] Mid-pipeline
-- [x] Post-output
+- [x] Post-input
 
-Notes: RAG-specific checks (groundedness, relevance) are inherently post-retrieval / post-output.
+Notes: RAG-specific checks (groundedness, relevance) are inherently post-retrieval / post-input.
 
 ## 4. Modality Support
 - [x] Text

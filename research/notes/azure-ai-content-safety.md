@@ -17,10 +17,10 @@ Azure AI Content Safety is Microsoft's managed content moderation and safety ser
 - [ ] SDK / library
 - [ ] Agent / sidecar
 
-## 3. Enforcement Locations
+## 3. Guardrail Locations
 - [x] Pre-input (Prompt Shields — direct and indirect injection)
 - [ ] Mid-pipeline
-- [x] Post-output (content filters, grounding detection, protected material)
+- [x] Post-input (content filters, grounding detection, protected material)
 
 ## 4. Modality Support
 - [x] Text

@@ -17,10 +17,10 @@ OpenGuardrails is an open-source (Apache 2.0) context-aware AI guardrails platfo
 - [x] SDK / library
 - [x] Agent / sidecar (Guard Agent for AI Agents)
 
-## 3. Enforcement Locations
+## 3. Guardrail Locations
 - [x] Pre-input
 - [x] Mid-pipeline
-- [x] Post-output
+- [x] Post-input
 
 ## 4. Modality Support
 - [x] Text

@@ -17,10 +17,10 @@ NVIDIA NeMo Guardrails is an open-source toolkit for adding programmable guardra
 - [x] SDK / library (embedded in application)
 - [x] Agent / sidecar (multi-agent support)
 
-## 3. Enforcement Locations
+## 3. Guardrail Locations
 - [x] Pre-input
 - [x] Mid-pipeline (parallel rails execution)
-- [x] Post-output
+- [x] Post-input
 
 ## 4. Modality Support
 - [x] Text

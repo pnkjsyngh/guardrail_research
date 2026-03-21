@@ -17,10 +17,10 @@ LlamaFirewall is Meta's open-source guardrail framework targeting AI agent secur
 - [x] SDK / library
 - [x] Agent / sidecar (designed for agentic pipelines)
 
-## 3. Enforcement Locations
+## 3. Guardrail Locations
 - [x] Pre-input (PromptGuard 2 — jailbreak and injection on user prompt)
 - [x] Mid-pipeline (AlignmentCheck — audits agent chain-of-thought in real time)
-- [x] Post-output (CodeShield — insecure code detection)
+- [x] Post-input (CodeShield — insecure code detection)
 
 ## 4. Modality Support
 - [x] Text

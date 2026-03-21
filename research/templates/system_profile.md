@@ -19,10 +19,10 @@
 
 Notes:
 
-## 3. Enforcement Locations
-<!-- Where in the request/response pipeline does enforcement happen? -->
+## 3. Guardrail Locations
+<!-- Where in the request/response pipeline does guardrail happen? -->
 - [ ] Pre-input (before prompt reaches the model)
-- [ ] Post-output (before response is returned to user)
+- [ ] Post-input (before response is returned to user)
 
 Notes:
 
@@ -36,7 +36,7 @@ Notes:
 Notes:
 
 ## 5. Constraint Types
-<!-- What enforcement mechanisms are available? -->
+<!-- What guardrail mechanisms are available? -->
 - [ ] Rule-based (regex, keyword lists, templates)
 - [ ] ML classifier (fine-tuned model)
 - [ ] LLM-as-judge

@@ -14,8 +14,8 @@ This file defines the canonical outline for `guardrails_whitepaper.md`. Each sec
 ### 2.2 Threat Model
 <!-- Describe the categories of harm guardrails defend against: prompt injection, jailbreaks, harmful content generation, PII leakage, insecure code output, hallucination, etc. -->
 
-### 2.3 Enforcement Architecture Patterns
-<!-- Explain the two enforcement points covered in this paper: pre-input and post-output. Include a simple diagram or ASCII figure referencing `figures/enforcement_architecture.png`. -->
+### 2.3 Guardrail Architecture Patterns
+<!-- Explain the two guardrail points covered in this paper: pre-input and post-input. Include a simple diagram or ASCII figure referencing `figures/enforcement_architecture.png`. -->
 
 ## 3. Methods
 ### 3.1 Vendor Selection Criteria
@@ -25,7 +25,7 @@ This file defines the canonical outline for `guardrails_whitepaper.md`. Each sec
 <!-- Describe the documentation-only methodology: what was collected, where it is stored, and how gaps were handled. -->
 
 ### 3.3 Evaluation Dimensions
-<!-- List and define the dimensions used across all system profiles (enforcement location, modality, policy language, extensibility, observability, performance, licensing). -->
+<!-- List and define the dimensions used across all system profiles (guardrail location, modality, policy language, extensibility, observability, performance, licensing). -->
 
 ## 4. System Profiles
 <!-- One subsection per vendor. Each subsection summarizes the filled system profile from `research/notes/<vendor>.md`. Keep each profile to ~1 page in the paper; full details remain in the notes. -->
@@ -42,8 +42,8 @@ This file defines the canonical outline for `guardrails_whitepaper.md`. Each sec
 ### 4.10 CalypsoAI / F5 AI Guardrails
 
 ## 5. Findings
-### 5.1 Coverage by Enforcement Location
-<!-- Table: which systems enforce pre-input / post-output. -->
+### 5.1 Coverage by Guardrail Location
+<!-- Table: which systems enforce pre-input / post-input. -->
 <!-- Figure placeholder: `figures/coverage_enforcement.png` -->
 
 ### 5.2 Modality Support Comparison
