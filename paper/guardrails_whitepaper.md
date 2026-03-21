@@ -34,9 +34,9 @@ This white paper surveys ten guardrail systems — open-source and commercial �
 
 ## 2. Background
 
-### 2.1 What Are LLM Guardrails?
+### 2.1 What Are Guardrails?
 
-A guardrail is a runtime enforcement mechanism that intercepts and evaluates the inputs sent to, or outputs received from, a large language model, and takes an action — blocking, redacting, transforming, or alerting — when a policy is violated. Guardrails are distinct from alignment training and Reinforcement Learning from Human Feedback (RLHF). Alignment training shapes a model's general behavior during the training phase; it cannot be updated quickly in response to new threats or new organizational policies, and it cannot be scoped to a specific deployment context. Guardrails operate at inference time and can be updated, versioned, and audited independently of the model.
+A guardrail is a runtime enforcement mechanism that intercepts and evaluates the inputs sent to, or outputs received from, a large language model, and takes an action — blocking, redacting, transforming, or alerting — when a policy is violated. Guardrails are distinct from alignment training and Reinforcement Learning from Human Feedback (RLHF). Guardrails operate at inference time and can be updated, versioned, and audited independently of the model.
 
 The need for inference-time guardrails arises from several practical realities. First, models can be fine-tuned or prompted in ways that bypass alignment. Second, organizational policies — data residency, topic restrictions, PII redaction requirements — vary by deployment context and cannot be encoded once into a model. Third, agentic systems, where models take actions on behalf of users, introduce new attack surfaces (prompt injection by external content, goal misalignment in multi-step reasoning) that training-time alignment does not address.
 
