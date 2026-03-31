@@ -3,7 +3,8 @@
     "allow": [
       "WebSearch",
       "WebFetch(domain:guardrailsai.com)",
-      "WebFetch(domain:hub.guardrailsai.com)"
+      "WebFetch(domain:hub.guardrailsai.com)",
+      "WebFetch(domain:www.helpnetsecurity.com)"
     ]
   }
 }
